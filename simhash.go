@@ -1,7 +1,6 @@
 package simhash
 
 import (
-	"fmt"
 	"hash/fnv"
 
 	"github.com/gensmusic/jiebago/analyse"
@@ -47,8 +46,7 @@ func Simhash(s *string, topN int) uint64 {
 	}
 
 	weights := calWeights(hashes)
-	fmt.Println(weights)
-	return 0
+	return fingerprint(weights)
 }
 
 func hasher(s string) uint64 {

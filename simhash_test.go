@@ -2,6 +2,7 @@ package simhash
 
 import (
 	"log"
+	"strconv"
 	"testing"
 )
 
@@ -55,9 +56,22 @@ func TestFingerprint(t *testing.T) {
 		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
 		0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,
 	}
-
 	fp := fingerprint(weights)
-	AssertUint64Equal(t, fp, uint64(18374966859414962000))
+	AssertStringEqual(t, strconv.FormatUint(fp, 2), "1111111100000000111111110000000011111111000000001111111100000000")
+
+	weights = [64]float64{
+		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
+		0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,
+		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
+		0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,
+		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
+		0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0,
+		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
+		-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0,
+	}
+	fp = fingerprint(weights)
+	AssertStringEqual(t, strconv.FormatUint(fp, 2), "111111110000000011111111000000001111111100000000")
+	AssertUint64Equal(t, fp, uint64(280379743338240))
 }
 
 func AssertIntEqual(t *testing.T, a, b int) {
@@ -73,6 +87,12 @@ func AssertUint64Equal(t *testing.T, a, b uint64) {
 }
 
 func AssertFloat64Equal(t *testing.T, a, b float64) {
+	if a != b {
+		t.Errorf("%f should equal %f", a, b)
+	}
+}
+
+func AssertStringEqual(t *testing.T, a, b string) {
 	if a != b {
 		t.Errorf("%f should equal %f", a, b)
 	}
